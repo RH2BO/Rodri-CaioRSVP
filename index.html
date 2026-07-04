@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RSVP - Caio y Rodri!</title>
+    <!-- Librería de Estilos Pixel Art -->
+    <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #212529;
+            font-family: 'Press Start 2P', monospace;
+            padding: 15px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-size: 11px;
+        }
+
+        .game-container {
+    max-width: 400px;
+    width: 100%;
+    min-height: 520px;
+    
+    /* Imagen por defecto (Ojos abiertos) */
+    background-image: url('1-abierto.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    color: #212529;
+    padding: 25px 20px;
+    border-radius: 4px;
+    box-sizing: border-box;
+
+    /* Activamos el intercambio de imágenes */
+    animation: parpadeoImagenes 4s infinite;
+}
+
+/* Animación que cambia de archivo bruscamente (sin transiciones suaves) */
+@keyframes parpadeoImagenes {
+    0%, 88% { 
+        background-image: url('1-abierto.png'); 
+    }
+    90% { 
+        background-image: url('2-semi.png'); 
+    }
+    92%, 95% { 
+        background-image: url('3-Fechado.png'); /* Ojo con la extensión .jpg aquí */
+    }
+    97% { 
+        background-image: url('2-semi.png'); 
+    }
+    100% { 
+        background-image: url('1-abierto.png'); 
+    }
+}
+
+        #game-flow {
+            height: 100%;
+            min-height: 470px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Configuración para empujar los botones y elementos interactivos al fondo */
+        .screen {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 470px;
+            width: 100%;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Asegura legibilidad del texto sobre la foto de fondo */
+        .nes-balloon {
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            margin-bottom: 20px;
+        }
+
+        .nes-balloon::after {
+            border-left-color: rgba(255, 255, 255, 0.95) !important;
+        }
+
+        .bottom-content-wrapper {
+            margin-top: auto;
+            /* Empuja todo este contenedor hacia abajo */
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .btn-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-wrapper {
+            margin-bottom: 15px;
+        }
+
+        input,
+        select {
+            width: 100%;
+        }
+
+        .details-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 12px 10px;
+            border: 2px dashed #212529;
+            font-size: 10px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .details-info-line {
+            margin-top: 8px;
+            border-top: 1px dashed #212529;
+            padding-top: 8px;
+            color: #1b4f72;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game-container nes-container is-rounded">
+
+        <div id="game-flow">
+
+            <!-- PANTALLA 0: IDIOMA -->
+            <div id="screen-idioma" class="screen active">
+                <div class="nes-balloon from-right">
+                    <p>Choose your language / Escolha o idioma / Elegí tu idioma:</p>
+                </div>
+                <div class="btn-container">
+                    <button class="nes-btn is-primary" onclick="selectLanguage('es')">[ ESPAÑOL (ARG) ]</button>
+                    <button class="nes-btn is-success" onclick="selectLanguage('pt')">[ PORTUGUÊS (BR) ]</button>
+                    <button class="nes-btn is-warning" onclick="selectLanguage('en')">[ ENGLISH ]</button>
+                </div>
+            </div>
+
+            <!-- PANTALLA 1: INTRO (HISTORIA) -->
+            <div id="screen-intro" class="screen">
+                <div class="nes-balloon from-right">
+                    <p id="text-intro"></p>
+                </div>
+                <div class="btn-container">
+                    <button class="nes-btn is-primary" id="btn-comenzar"
+                        onclick="nextScreen('intro', 'nombre')"></button>
+                </div>
+            </div>
+
+            <!-- PANTALLA 2: NOMBRE -->
+            <div id="screen-nombre" class="screen">
+                <div class="nes-balloon from-right">
+                    <p id="text-nombre-q"></p>
+                </div>
+                <div class="bottom-content-wrapper">
+                    <div class="input-wrapper">
+                        <div class="nes-field">
+                            <input type="text" id="input-nombre" class="nes-input" placeholder="...">
+                        </div>
+                    </div>
+                    <div class="btn-container">
+                        <button class="nes-btn is-success" id="btn-nombre" onclick="saveNombre()"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANTALLA 3: CONFIRMACIÓN DE ASISTENCIA -->
+            <div id="screen-asistencia" class="screen">
+                <div class="nes-balloon from-right">
+                    <p id="text-asistencia-q"></p>
+                </div>
+                <div class="btn-container">
+                    <button class="nes-btn is-primary" id="btn-si" onclick="saveAsistencia('Sí')"></button>
+                    <button class="nes-btn is-error" id="btn-no" onclick="saveAsistencia('No')"></button>
+                </div>
+            </div>
+
+            <!-- PANTALLA 4: DIETA / MENÚ -->
+            <div id="screen-dieta" class="screen">
+                <div class="nes-balloon from-right">
+                    <p id="text-dieta-q"></p>
+                </div>
+                <div class="bottom-content-wrapper">
+                    <div class="input-wrapper">
+                        <div class="nes-select">
+                            <select id="select-dieta">
+                                <!-- Dinámico -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="btn-container">
+                        <button class="nes-btn is-success" id="btn-dieta" onclick="saveDieta()"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANTALLA 5: DETALLES DEL EVENTO -->
+            <div id="screen-detalles" class="screen">
+                <div class="nes-balloon from-right">
+                    <p id="text-detalles-intro"></p>
+                </div>
+                <!-- Todo este bloque se alinea abajo ahora de forma automatica -->
+                <div class="bottom-content-wrapper">
+                    <div class="details-box" id="box-detalles">
+                        <!-- Dinámico -->
+                    </div>
+                    <div class="btn-container">
+                        <button class="nes-btn is-primary" id="btn-confirmar-todo" onclick="confirmarTodo()"></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANTALLA FINAL: ENVIANDO / GRACIAS -->
+            <div id="screen-final" class="screen">
+                <div class="nes-balloon from-right">
+                    <p id="final-text"></p>
+                </div>
+                <div class="btn-container" style="text-align: center; margin-bottom: 20px;">
+                    <progress class="nes-progress is-primary" value="40" max="100" id="game-progress"></progress>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const i18n = {
+            es: {
+                intro: "¡Ahoy! Soy la Capitana. Mis papás (Rodri y Caio) van a celebrar su casamiento en alta mar y yo estoy armando la tripulación para esta gran aventura marítima. ¡Guau!",
+                btnComenzar: "[ ¡A BORDO! ]",
+                qNombre: "¿A qué familia o tripulante tengo el honor de registrar hoy?",
+                btnSiguiente: "[ SIGUIENTE ]",
+                qAsistencia: "¿Contaremos con su espada y su copa para zarpar con nosotros?",
+                btnSi: "[ SÍ, ¡ZARPAMOS! ]",
+                btnNo: "[ NO, ME QUEDO EN TIERRA ]",
+                qDieta: "En la bodega hay banquetes de sobra, pero avisen: ¿Tienen alguna restricción alimentaria en el grupo?",
+                dietas: [
+                    { v: "Ninguna", t: "Comemos de todo 🍖" },
+                    { v: "Vegetariano", t: "Vegetariano/s 🥗" },
+                    { v: "Vegano", t: "Vegano/s 🌱" },
+                    { v: "Celíaco", t: "Sin TACC / Celíaco 🌾" },
+                    { v: "Varios", t: "Múltiples restricciones 🍽️" }
+                ],
+                detallesIntro: "¡Excelente! Anoten bien las coordenadas de nuestro puerto de encuentro en la bitácora:",
+                detallesBox: "📅 17 de Abril de 2027<br>⏰ 11:30 AM<br>📍 Marina da Glória<br>🏙️ Rio de Janeiro<div class='details-info-line'>¡Recibirán más información en breve! ⚓</div>",
+                btnConfirmarTodo: "[ CONFIRMAR BITÁCORA ]",
+                guardando: "¡Enviando coordenadas al mapa del tesoro...!",
+                error: "¡Tormenta a la vista! Hubo un error al guardar. Intentá de nuevo.",
+                gracias: "¡Bitácora actualizada! Nos vemos en el puerto. ¡Guau! 🐾",
+                graciasNo: "¡Qué lástima! Informaré a mis papás. ¡Buen viento en tus viajes! ⚓"
+            },
+            pt: {
+                intro: "Ahoy! Eu sou a Capitã. Meus pais (Rodri e Caio) vão comemorar o casamento deles em alto mar e eu estou montando a tripulação para essa grande aventura marítima! Au au!",
+                btnComenzar: "[ SUBIR A BORDO ]",
+                qNombre: "Qual família ou tripulante tenho a honra de registrar hoje?",
+                btnSiguiente: "[ SEGUINTE ]",
+                qAsistencia: "Contaremos com a sua espada e o seu copo para zarpar conosco?",
+                btnSi: "[ SIM, VAMOS ZARPAR! ]",
+                btnNo: "[ NÃO, FICO EM TERRA ]",
+                qDieta: "No porão tem banquete de sobra, mas me avisem: Vocês têm alguma restrição alimentar no grupo?",
+                dietas: [
+                    { v: "Ninguna", t: "Comemos de tudo 🍖" },
+                    { v: "Vegetariano", t: "Vegetariano/s 🥗" },
+                    { v: "Vegano", t: "Vegano/s 🌱" },
+                    { v: "Celíaco", t: "Sem Glúten 🌾" },
+                    { v: "Varios", t: "Múltiplas restrições 🍽️" }
+                ],
+                detallesIntro: "Excelente! Anotem bem as coordenadas do nosso porto de encontro no diário de bordo:",
+                detallesBox: "📅 17 de Abril de 2027<br>⏰ 11:30 AM<br>📍 Marina da Glória<br>🏙️ Rio de Janeiro<div class='details-info-line'>Vocês receberão mais informações em breve! ⚓</div>",
+                btnConfirmarTodo: "[ CONFIRMAR DIÁRIO ]",
+                guardando: "Enviando coordenadas para o mapa do tesouro...!",
+                error: "Tempestade à vista! Houve um erro ao salvar. Tente novamente.",
+                gracias: "Diário de bordo atualizado! Nos vemos no porto. Au au! 🐾",
+                graciasNo: "Que pena! Vou avisar meus pais. Bons ventos nas suas viagens! ⚓"
+            },
+            en: {
+                intro: "Ahoy! I am the Captain. My dads (Rodri and Caio) are celebrating their wedding on the high seas, and I'm gathering the crew for this great maritime adventure! Woof!",
+                btnComenzar: "[ COME ABOARD ]",
+                qNombre: "Which family or crew member do I have the honor of registering today?",
+                btnSiguiente: "[ NEXT ]",
+                qAsistencia: "Will we have your sword and your glass to set sail with us?",
+                btnSi: "[ YES, WE SET SAIL! ]",
+                btnNo: "[ NO, STAYING ASHORE ]",
+                qDieta: "The galley is fully stocked, but let me know: Do you have any dietary restrictions in your group?",
+                dietas: [
+                    { v: "Ninguna", t: "Eat everything 🍖" },
+                    { v: "Vegetariano", t: "Vegetarian 🥗" },
+                    { v: "Vegano", t: "Vegan 🌱" },
+                    { v: "Celíaco", t: "Gluten Free 🌾" },
+                    { v: "Varios", t: "Multiple restrictions 🍽️" }
+                ],
+                detallesIntro: "Excellent! Make sure to write down our meeting port coordinates in the logbook:",
+                detallesBox: "📅 April 17, 2027<br>⏰ 11:30 AM<br>📍 Marina da Glória<br>🏙️ Rio de Janeiro<div class='details-info-line'>You will receive more information shortly! ⚓</div>",
+                btnConfirmarTodo: "[ CONFIRM LOGBOOK ]",
+                guardando: "Sending coordinates to the treasure map...!",
+                error: "Storm ahead! There was an error saving. Please try again.",
+                gracias: "Logbook updated! See you at the port. Woof! 🐾",
+                graciasNo: "What a pity! I will let my dads know. Fair winds on your travels! ⚓"
+            }
+        };
+
+        let currentLang = 'es';
+        const rsvpData = {
+            nombre: '',
+            asistencia: '',
+            dieta: 'Ninguna'
+        };
+
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx6-SweSTupk86RsDN1EjXGVZANVFKZtPymYWj3lCKySAF0x1imkVAUJPqM7eGInZrR/exec";
+
+        function selectLanguage(lang) {
+            currentLang = lang;
+            const t = i18n[lang];
+
+            document.getElementById('text-intro').innerText = t.intro;
+            document.getElementById('btn-comenzar').innerText = t.btnComenzar;
+            document.getElementById('text-nombre-q').innerText = t.qNombre;
+            document.getElementById('btn-nombre').innerText = t.btnSiguiente;
+            document.getElementById('text-asistencia-q').innerText = t.qAsistencia;
+            document.getElementById('btn-si').innerText = t.btnSi;
+            document.getElementById('btn-no').innerText = t.btnNo;
+            document.getElementById('text-dieta-q').innerText = t.qDieta;
+            document.getElementById('btn-dieta').innerText = t.btnSiguiente;
+            document.getElementById('text-detalles-intro').innerText = t.detallesIntro;
+            document.getElementById('box-detalles').innerHTML = t.detallesBox;
+            document.getElementById('btn-confirmar-todo').innerText = t.btnConfirmarTodo;
+
+            const selectDieta = document.getElementById('select-dieta');
+            selectDieta.innerHTML = '';
+            t.dietas.forEach(d => {
+                let opt = document.createElement('option');
+                opt.value = d.v;
+                opt.innerText = d.t;
+                selectDieta.appendChild(opt);
+            });
+
+            nextScreen('idioma', 'intro');
+        }
+
+        function nextScreen(current, next) {
+            document.getElementById(`screen-${current}`).classList.remove('active');
+            document.getElementById(`screen-${next}`).classList.add('active');
+        }
+
+        function saveNombre() {
+            const nom = document.getElementById('input-nombre').value;
+            if (nom.trim() === "") {
+                alert(currentLang === 'en' ? "Write your family name!" : currentLang === 'pt' ? "Escreva o nome da sua família!" : "¡Escribí el nombre de tu familia!");
+                return;
+            }
+            rsvpData.nombre = nom;
+            nextScreen('nombre', 'asistencia');
+        }
+
+        function saveAsistencia(opcion) {
+            rsvpData.asistencia = opcion;
+            if (opcion === 'Sí') {
+                nextScreen('asistencia', 'dieta');
+            } else {
+                nextScreen('asistencia', 'final');
+                document.getElementById('final-text').innerText = i18n[currentLang].guardando;
+                enviarDatosAGoogle(false);
+            }
+        }
+
+        function saveDieta() {
+            rsvpData.dieta = document.getElementById('select-dieta').value;
+            nextScreen('dieta', 'detalles');
+        }
+
+        function confirmarTodo() {
+            nextScreen('detalles', 'final');
+            document.getElementById('final-text').innerText = i18n[currentLang].guardando;
+            enviarDatosAGoogle(true);
+        }
+
+        function enviarDatosAGoogle(asiste) {
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(rsvpData)
+            })
+                .then(() => {
+                    document.getElementById('game-progress').value = 100;
+                    document.getElementById('final-text').innerText = asiste ? i18n[currentLang].gracias : i18n[currentLang].graciasNo;
+                })
+                .catch(err => {
+                    document.getElementById('game-progress').classList.add('is-error');
+                    document.getElementById('final-text').innerText = i18n[currentLang].error;
+                    console.error(err);
+                });
+        }
+    </script>
+</body>
+
+</html>
