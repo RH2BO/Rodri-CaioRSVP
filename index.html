@@ -28,7 +28,7 @@
     min-height: 520px;
     
     /* Imagen por defecto (Ojos abiertos) */
-    background-image: url('1-abierto.png');
+    background-image: url('1-abierto2.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -45,19 +45,19 @@
 /* Animación que cambia de archivo bruscamente (sin transiciones suaves) */
 @keyframes parpadeoImagenes {
     0%, 88% { 
-        background-image: url('1-abierto.png'); 
+        background-image: url('1-abierto2.png'); 
     }
     90% { 
-        background-image: url('2-semi.png'); 
+        background-image: url('2-semi2.png'); 
     }
     92%, 95% { 
-        background-image: url('3-Fechado.png'); /* Ojo con la extensión .jpg aquí */
+        background-image: url('3-Fechado2.png'); 
     }
     97% { 
-        background-image: url('2-semi.png'); 
+        background-image: url('2-semi2.png'); 
     }
     100% { 
-        background-image: url('1-abierto.png'); 
+        background-image: url('1-abierto2.png'); 
     }
 }
 
@@ -142,7 +142,7 @@
 
             <!-- PANTALLA 0: IDIOMA -->
             <div id="screen-idioma" class="screen active">
-                <div class="nes-balloon from-right">
+                <div class="nes-balloon from-left">
                     <p>Choose your language / Escolha o idioma / Elegí tu idioma:</p>
                 </div>
                 <div class="btn-container">
@@ -154,7 +154,7 @@
 
             <!-- PANTALLA 1: INTRO (HISTORIA) -->
             <div id="screen-intro" class="screen">
-                <div class="nes-balloon from-right">
+                <div class="nes-balloon from-left">
                     <p id="text-intro"></p>
                 </div>
                 <div class="btn-container">
@@ -165,7 +165,7 @@
 
             <!-- PANTALLA 2: NOMBRE -->
             <div id="screen-nombre" class="screen">
-                <div class="nes-balloon from-right">
+                <div class="nes-balloon from-left">
                     <p id="text-nombre-q"></p>
                 </div>
                 <div class="bottom-content-wrapper">
@@ -182,7 +182,7 @@
 
             <!-- PANTALLA 3: CONFIRMACIÓN DE ASISTENCIA -->
             <div id="screen-asistencia" class="screen">
-                <div class="nes-balloon from-right">
+                <div class="nes-balloon from-left">
                     <p id="text-asistencia-q"></p>
                 </div>
                 <div class="btn-container">
@@ -193,7 +193,7 @@
 
             <!-- PANTALLA 4: DIETA / MENÚ -->
             <div id="screen-dieta" class="screen">
-                <div class="nes-balloon from-right">
+                <div class="nes-balloon from-left">
                     <p id="text-dieta-q"></p>
                 </div>
                 <div class="bottom-content-wrapper">
@@ -212,7 +212,7 @@
 
             <!-- PANTALLA 5: DETALLES DEL EVENTO -->
             <div id="screen-detalles" class="screen">
-                <div class="nes-balloon from-right">
+                <div class="nes-balloon from-left">
                     <p id="text-detalles-intro"></p>
                 </div>
                 <!-- Todo este bloque se alinea abajo ahora de forma automatica -->
@@ -228,7 +228,7 @@
 
             <!-- PANTALLA FINAL: ENVIANDO / GRACIAS -->
             <div id="screen-final" class="screen">
-                <div class="nes-balloon from-right">
+                <div class="nes-balloon from-left">
                     <p id="final-text"></p>
                 </div>
                 <div class="btn-container" style="text-align: center; margin-bottom: 20px;">
