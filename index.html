@@ -23,43 +23,43 @@
         }
 
         .game-container {
-    max-width: 400px;
-    width: 100%;
-    min-height: 520px;
-    
-    /* Imagen por defecto (Ojos abiertos) */
-    background-image: url('1-abierto2.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    
-    color: #212529;
-    padding: 25px 20px;
-    border-radius: 4px;
-    box-sizing: border-box;
+            max-width: 400px;
+            width: 100%;
+            min-height: 520px;
+            
+            /* Imagen por defecto (Ojos abiertos) */
+            background-image: url('1-abierto2.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            color: #212529;
+            padding: 25px 20px;
+            border-radius: 4px;
+            box-sizing: border-box;
 
-    /* Activamos el intercambio de imágenes */
-    animation: parpadeoImagenes 4s infinite;
-}
+            /* Activamos el intercambio de imágenes */
+            animation: parpadeoImagenes 4s infinite;
+        }
 
-/* Animación que cambia de archivo bruscamente (sin transiciones suaves) */
-@keyframes parpadeoImagenes {
-    0%, 88% { 
-        background-image: url('1-abierto2.png'); 
-    }
-    90% { 
-        background-image: url('2-semi2.png'); 
-    }
-    92%, 95% { 
-        background-image: url('3-Fechado2.png'); 
-    }
-    97% { 
-        background-image: url('2-semi2.png'); 
-    }
-    100% { 
-        background-image: url('1-abierto2.png'); 
-    }
-}
+        /* Animación que cambia de archivo bruscamente (sin transiciones suaves) */
+        @keyframes parpadeoImagenes {
+            0%, 88% { 
+                background-image: url('1-abierto2.png'); 
+            }
+            90% { 
+                background-image: url('2-semi2.png'); 
+            }
+            92%, 95% { 
+                background-image: url('3-Fechado2.png'); 
+            }
+            97% { 
+                background-image: url('2-semi2.png'); 
+            }
+            100% { 
+                background-image: url('1-abierto2.png'); 
+            }
+        }
 
         #game-flow {
             height: 100%;
@@ -85,10 +85,11 @@
         .nes-balloon {
             background-color: rgba(255, 255, 255, 0.95) !important;
             margin-bottom: 20px;
+            line-height: 1.5;
         }
 
         .nes-balloon::after {
-            border-left-color: rgba(255, 255, 255, 0.95) !important;
+            border-right-color: rgba(255, 255, 255, 0.95) !important;
         }
 
         .bottom-content-wrapper {
@@ -152,14 +153,33 @@
                 </div>
             </div>
 
-            <!-- PANTALLA 1: INTRO (HISTORIA) -->
-            <div id="screen-intro" class="screen">
+            <!-- PANTALLA 1: INTRO PARTE 1 -->
+            <div id="screen-intro1" class="screen">
                 <div class="nes-balloon from-left">
-                    <p id="text-intro"></p>
+                    <p id="text-intro1"></p>
                 </div>
                 <div class="btn-container">
-                    <button class="nes-btn is-primary" id="btn-comenzar"
-                        onclick="nextScreen('intro', 'nombre')"></button>
+                    <button class="nes-btn is-primary" id="btn-next1" onclick="nextScreen('intro1', 'intro2')"></button>
+                </div>
+            </div>
+
+            <!-- PANTALLA 1B: INTRO PARTE 2 -->
+            <div id="screen-intro2" class="screen">
+                <div class="nes-balloon from-left">
+                    <p id="text-intro2"></p>
+                </div>
+                <div class="btn-container">
+                    <button class="nes-btn is-primary" id="btn-next2" onclick="nextScreen('intro2', 'intro3')"></button>
+                </div>
+            </div>
+
+            <!-- PANTALLA 1C: INTRO PARTE 3 -->
+            <div id="screen-intro3" class="screen">
+                <div class="nes-balloon from-left">
+                    <p id="text-intro3"></p>
+                </div>
+                <div class="btn-container">
+                    <button class="nes-btn is-success" id="btn-comenzar" onclick="nextScreen('intro3', 'nombre')"></button>
                 </div>
             </div>
 
@@ -215,7 +235,6 @@
                 <div class="nes-balloon from-left">
                     <p id="text-detalles-intro"></p>
                 </div>
-                <!-- Todo este bloque se alinea abajo ahora de forma automatica -->
                 <div class="bottom-content-wrapper">
                     <div class="details-box" id="box-detalles">
                         <!-- Dinámico -->
@@ -242,10 +261,12 @@
     <script>
         const i18n = {
             es: {
-                intro: "¡Ahoy! Soy la Capitana. Mis papás (Rodri y Caio) van a celebrar su casamiento en alta mar y yo estoy armando la tripulación para esta gran aventura marítima. ¡Guau!",
+                intro1: "¡Ahoy! Soy la Capitana... 🐾",
+                intro2: "Mis papás (Rodri y Caio) van a celebrar su casamiento en alta mar...",
+                intro3: "Y yo estoy armando la tripulación para esta gran aventura marítima. ¡Guau!",
+                btnSiguiente: "[ SIGUIENTE ]",
                 btnComenzar: "[ ¡A BORDO! ]",
                 qNombre: "¿A qué familia o tripulante tengo el honor de registrar hoy?",
-                btnSiguiente: "[ SIGUIENTE ]",
                 qAsistencia: "¿Contaremos con su espada y su copa para zarpar con nosotros?",
                 btnSi: "[ SÍ, ¡ZARPAMOS! ]",
                 btnNo: "[ NO, ME QUEDO EN TIERRA ]",
@@ -262,14 +283,16 @@
                 btnConfirmarTodo: "[ CONFIRMAR BITÁCORA ]",
                 guardando: "¡Enviando coordenadas al mapa del tesoro...!",
                 error: "¡Tormenta a la vista! Hubo un error al guardar. Intentá de nuevo.",
-                gracias: "¡Bitácora actualizada! Nos vemos en el puerto. ¡Guau! 🐾",
-                graciasNo: "¡Qué lástima! Informaré a mis papás. ¡Buen viento en tus viajes! ⚓"
+                gracias: "¡Bitácora actualizada! Nos vemos en el puerto. ¡Mis papás se contactarán con ustedes en breve! ¡Guau! 🐾",
+                graciasNo: "¡Qué lástima! Informaré a mis papás, se contactarán con ustedes en breve. ¡Buen viento! ⚓"
             },
             pt: {
-                intro: "Ahoy! Eu sou a Capitã. Meus pais (Rodri e Caio) vão comemorar o casamento deles em alto mar e eu estou montando a tripulação para essa grande aventura marítima! Au au!",
+                intro1: "Ahoy! Eu sou a Capitã... 🐾",
+                intro2: "Meus pais (Rodri e Caio) vão comemorar o casamento deles em alto mar...",
+                intro3: "E eu estou montando a tripulação para essa grande aventura marítima! Au au!",
+                btnSiguiente: "[ SEGUINTE ]",
                 btnComenzar: "[ SUBIR A BORDO ]",
                 qNombre: "Qual família ou tripulante tenho a honra de registrar hoje?",
-                btnSiguiente: "[ SEGUINTE ]",
                 qAsistencia: "Contaremos com a sua espada e o seu copo para zarpar conosco?",
                 btnSi: "[ SIM, VAMOS ZARPAR! ]",
                 btnNo: "[ NÃO, FICO EM TERRA ]",
@@ -286,14 +309,16 @@
                 btnConfirmarTodo: "[ CONFIRMAR DIÁRIO ]",
                 guardando: "Enviando coordenadas para o mapa do tesouro...!",
                 error: "Tempestade à vista! Houve um erro ao salvar. Tente novamente.",
-                gracias: "Diário de bordo atualizado! Nos vemos no porto. Au au! 🐾",
-                graciasNo: "Que pena! Vou avisar meus pais. Bons ventos nas suas viagens! ⚓"
+                gracias: "Diário de bordo atualizado! Nos vemos no porto. Meus pais entrarão em contato em breve! Au au! 🐾",
+                graciasNo: "Que pena! Vou avisar meus pais, eles entrarão em contato em breve. Bons ventos! ⚓"
             },
             en: {
-                intro: "Ahoy! I am the Captain. My dads (Rodri and Caio) are celebrating their wedding on the high seas, and I'm gathering the crew for this great maritime adventure! Woof!",
+                intro1: "Ahoy! I am the Captain... 🐾",
+                intro2: "My dads (Rodri and Caio) are celebrating their wedding on the high seas...",
+                intro3: "And I'm gathering the crew for this great maritime adventure! Woof!",
+                btnSiguiente: "[ NEXT ]",
                 btnComenzar: "[ COME ABOARD ]",
                 qNombre: "Which family or crew member do I have the honor of registering today?",
-                btnSiguiente: "[ NEXT ]",
                 qAsistencia: "Will we have your sword and your glass to set sail with us?",
                 btnSi: "[ YES, WE SET SAIL! ]",
                 btnNo: "[ NO, STAYING ASHORE ]",
@@ -310,8 +335,8 @@
                 btnConfirmarTodo: "[ CONFIRM LOGBOOK ]",
                 guardando: "Sending coordinates to the treasure map...!",
                 error: "Storm ahead! There was an error saving. Please try again.",
-                gracias: "Logbook updated! See you at the port. Woof! 🐾",
-                graciasNo: "What a pity! I will let my dads know. Fair winds on your travels! ⚓"
+                gracias: "Logbook updated! See you at the port. My dads will contact you shortly! Woof! 🐾",
+                graciasNo: "What a pity! I will let my dads know, they will contact you shortly. Fair winds! ⚓"
             }
         };
 
@@ -328,8 +353,13 @@
             currentLang = lang;
             const t = i18n[lang];
 
-            document.getElementById('text-intro').innerText = t.intro;
+            document.getElementById('text-intro1').innerText = t.intro1;
+            document.getElementById('btn-next1').innerText = t.btnSiguiente;
+            document.getElementById('text-intro2').innerText = t.intro2;
+            document.getElementById('btn-next2').innerText = t.btnSiguiente;
+            document.getElementById('text-intro3').innerText = t.intro3;
             document.getElementById('btn-comenzar').innerText = t.btnComenzar;
+
             document.getElementById('text-nombre-q').innerText = t.qNombre;
             document.getElementById('btn-nombre').innerText = t.btnSiguiente;
             document.getElementById('text-asistencia-q').innerText = t.qAsistencia;
@@ -350,9 +380,10 @@
                 selectDieta.appendChild(opt);
             });
 
-            nextScreen('idioma', 'intro');
+            nextScreen('idioma', 'intro1');
         }
 
+        UX / Interfaz
         function nextScreen(current, next) {
             document.getElementById(`screen-${current}`).classList.remove('active');
             document.getElementById(`screen-${next}`).classList.add('active');
@@ -411,4 +442,5 @@
         }
     </script>
 </body>
+
 </html>
